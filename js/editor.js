@@ -3,9 +3,9 @@
 
    Two modes:
    - SIMPLE (default): students don't actually type Python here. The modal
-     shows "You've worked hard to edit your code… Click 'Done Coding' to
-     continue." and clicking the button applies a simulated change so the
-     file shows up as modified/untracked in Git.
+     shows "First do some coding, be sure to save your work. Click 'Done
+     Coding' to continue." and clicking the button applies a simulated change
+     so the file shows up as modified/untracked in Git.
    - CONFLICT: when the file contains merge-conflict markers (Phase 4), the
      real textarea opens — deleting the <<<<<<< markers by hand IS the
      lesson, so that stays hands-on.

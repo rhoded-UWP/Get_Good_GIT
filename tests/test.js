@@ -66,10 +66,10 @@ function makePhaseRunner(def) {
 const phases = {};
 GG.curriculum.phases.forEach(p => phases[p.id] = p);
 
-/* ================= PHASE 1A ================= */
-console.log('\nPHASE 1A');
+/* ================= PHASE 1 ================= */
+console.log('\nPHASE 1');
 {
-  const R = makePhaseRunner(phases['1A']);
+  const R = makePhaseRunner(phases['1']);
 
   // error path: git status outside repo
   let r = R.run('git status');
@@ -79,15 +79,20 @@ console.log('\nPHASE 1A');
   r = R.run('git clone https://github.com/student/wrong-repo.git');
   assert(!r.ok && textOf(r).includes('not found'), 'clone wrong url -> repository not found');
 
-  r = R.run('git clone https://github.com/student/age-safe.git');
-  assert(r.ok && textOf(r).includes("Cloning into 'age-safe'"), 'clone succeeds');
+  r = R.run('git clone https://github.com/student/age_safe.git');
+  assert(r.ok && textOf(r).includes("Cloning into 'age_safe'"), 'clone succeeds');
 
   // git status still fails outside the folder
   r = R.run('git status');
   assert(!r.ok && textOf(r).includes('fatal: not a git repository'), 'status outside folder still fatal');
 
-  r = R.run('cd age-safe');
+  r = R.run('cd age_safe');
   assert(r.ok, 'cd into repo');
+
+  r = R.run('dir');
+  assert(r.ok && textOf(r).includes('age_safe.py'), 'dir lists files in the repo');
+  r = R.run('ls');
+  assert(r.ok && textOf(r).includes('age_safe.py'), 'ls works as an alias for dir');
 
   r = R.run('git status');
   assert(r.ok && textOf(r).includes('working tree clean') && textOf(r).includes("up to date with 'origin/main'"), 'clean status');
@@ -130,16 +135,16 @@ console.log('\nPHASE 1A');
   r = R.run('git push');
   assert(r.ok && textOf(r).includes('Everything up-to-date'), 'push again up to date');
 
-  assert(R.skills.every(s => s.done), 'ALL 1A skills complete: ' + R.skills.filter(s => !s.done).map(s => s.def.id).join(','));
+  assert(R.skills.every(s => s.done), 'ALL Phase 1 skills complete: ' + R.skills.filter(s => !s.done).map(s => s.def.id).join(','));
 }
 
-/* ================= PHASE 1B ================= */
-console.log('\nPHASE 1B');
+/* ================= PHASE 2 ================= */
+console.log('\nPHASE 2');
 {
-  const R = makePhaseRunner(phases['1B']);
+  const R = makePhaseRunner(phases['2']);
 
-  let r = R.run('cd age-safe');
-  assert(r.ok, 'cd age-safe');
+  let r = R.run('cd age_safe');
+  assert(r.ok, 'cd age_safe');
 
   r = R.run('git status');
   assert(!r.ok && r.meta.notARepo, 'status before init errors');
@@ -149,7 +154,7 @@ console.log('\nPHASE 1B');
   assert(!r.ok && textOf(r).includes('fatal: not a git repository'), 'push before init -> not a repo');
 
   r = R.run('git init');
-  assert(r.ok && textOf(r).includes('Initialized empty Git repository in C:/CS1430/age-safe/.git/'), 'init ok with course path');
+  assert(r.ok && textOf(r).includes('Initialized empty Git repository in C:/CS1430/age_safe/.git/'), 'init ok with course path');
   const folder = GG.state.currentFolder(R.scn);
   assert(folder.branch === 'master', 'init creates master');
 
@@ -168,7 +173,7 @@ console.log('\nPHASE 1B');
   r = R.run('git remote -v');
   assert(r.ok && r.lines.length === 0, 'remote -v empty before add');
 
-  r = R.run('git remote add origin https://github.com/student/age-safe.git');
+  r = R.run('git remote add origin https://github.com/student/age_safe.git');
   assert(r.ok && r.lines.length === 0, 'remote add silent');
 
   r = R.run('git remote -v');
@@ -187,13 +192,13 @@ console.log('\nPHASE 1B');
   r = R.run('git push');
   assert(r.ok && textOf(r).includes('Everything up-to-date'), 'plain push now works');
 
-  assert(R.skills.every(s => s.done), 'ALL 1B skills complete: ' + R.skills.filter(s => !s.done).map(s => s.def.id).join(','));
+  assert(R.skills.every(s => s.done), 'ALL Phase 2 skills complete: ' + R.skills.filter(s => !s.done).map(s => s.def.id).join(','));
 }
 
-/* ================= PHASE 2 ================= */
-console.log('\nPHASE 2');
+/* ================= PHASE 3 ================= */
+console.log('\nPHASE 3');
 {
-  const R = makePhaseRunner(phases['2']);
+  const R = makePhaseRunner(phases['3']);
 
   let r = R.run('git status');
   assert(textOf(r).includes('behind') && textOf(r).includes('fast-forwarded'), 'status shows behind');
@@ -206,7 +211,7 @@ console.log('\nPHASE 2');
   assert(!r.ok && textOf(r).includes('[rejected]') && textOf(r).includes('fetch first'), 'push while behind rejected');
 
   // reset for the clean path
-  const R2 = makePhaseRunner(phases['2']);
+  const R2 = makePhaseRunner(phases['3']);
   r = R2.run('git pull');
   assert(r.ok && textOf(r).includes('Fast-forward') && textOf(r).includes('age_safe.py'), 'pull fast-forwards age_safe.py');
   const py = GG.state.findFile(GG.state.currentFolder(R2.scn), 'age_safe.py');
@@ -232,10 +237,10 @@ console.log('\nPHASE 2');
   assert(R2.skills.every(s => s.done), 'ALL 2 skills complete: ' + R2.skills.filter(s => !s.done).map(s => s.def.id).join(','));
 }
 
-/* ================= PHASE 3 ================= */
-console.log('\nPHASE 3');
+/* ================= PHASE 4 ================= */
+console.log('\nPHASE 4');
 {
-  const R = makePhaseRunner(phases['3']);
+  const R = makePhaseRunner(phases['4']);
 
   let r = R.run('git branch');
   assert(r.ok && textOf(r).includes('* main'), 'branch lists main');
@@ -277,10 +282,10 @@ console.log('\nPHASE 3');
   assert(R.skills.every(s => s.done), 'ALL 3 skills complete: ' + R.skills.filter(s => !s.done).map(s => s.def.id).join(','));
 }
 
-/* ================= PHASE 4 ================= */
-console.log('\nPHASE 4');
+/* ================= PHASE 5 ================= */
+console.log('\nPHASE 5');
 {
-  const R = makePhaseRunner(phases['4']);
+  const R = makePhaseRunner(phases['5']);
 
   let r = R.run('git switch main');
   assert(r.ok && textOf(r).includes('behind'), 'switch main warns behind');
@@ -326,7 +331,7 @@ console.log('\nPHASE 4');
   assert(R.skills.every(s => s.done), 'ALL 4 skills complete: ' + R.skills.filter(s => !s.done).map(s => s.def.id).join(','));
 
   // merge --abort path on a fresh run
-  const R2 = makePhaseRunner(phases['4']);
+  const R2 = makePhaseRunner(phases['5']);
   R2.run('git switch main');
   R2.run('git pull');
   R2.run('git merge parallel-conditionals');

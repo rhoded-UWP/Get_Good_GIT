@@ -53,7 +53,7 @@ window.GG = window.GG || {};
 
   var HOME_PATH = 'C:\\CS1430';
 
-  /** display path in Windows form, e.g. C:\CS1430\age-safe */
+  /** display path in Windows form, e.g. C:\CS1430\age_safe */
   function winPath(scn, extra) {
     var p = scn.cwd === '~' ? HOME_PATH : HOME_PATH + '\\' + scn.cwd.slice(2);
     return extra ? p + '\\' + extra : p;
@@ -212,7 +212,7 @@ window.GG = window.GG || {};
     ].join('\n')
   };
 
-  var REPO_URL = 'https://github.com/student/age-safe.git';
+  var REPO_URL = 'https://github.com/student/age_safe.git';
 
   /* ---- scenario factories ------------------------------------------------
      One per phase tab. Reset = call the factory again.                     */
@@ -246,15 +246,15 @@ window.GG = window.GG || {};
     };
   }
 
-  /* Phase 1A — clone your Age Safe repo, practice the basic loop */
-  function seed1A() {
+  /* Phase 1 — clone your Age Safe repo, practice the basic loop */
+  function seed1() {
     var scn = baseScenario();
     var commits = [
       makeCommit('Initial commit', { touched: ['age_safe.py', 'README.md'], insertions: 12 }),
       makeCommit('Add sample test ages', { touched: ['ages.txt'], insertions: 5 })
     ];
     scn.remoteRepos[REPO_URL] = {
-      name: 'age-safe',
+      name: 'age_safe',
       url: REPO_URL,
       files: [
         makeFile('age_safe.py', C.ageSafeV1, 'clean', true),
@@ -266,12 +266,12 @@ window.GG = window.GG || {};
     return scn;
   }
 
-  /* Phase 1B — Age Safe already written locally, connect it to an empty repo */
-  function seed1B() {
+  /* Phase 2 — Age Safe already written locally, connect it to an empty repo */
+  function seed2() {
     var scn = baseScenario();
     scn.expectedRemoteUrl = REPO_URL;
-    scn.folders['age-safe'] = {
-      name: 'age-safe',
+    scn.folders['age_safe'] = {
+      name: 'age_safe',
       isRepo: false,
       branch: null,
       branches: [],
@@ -291,13 +291,13 @@ window.GG = window.GG || {};
     return scn;
   }
 
-  /* Phase 2 — update your program: pull what you pushed from the lab computer */
-  function seed2() {
+  /* Phase 3 — update your program: pull what you pushed from the lab computer */
+  function seed3() {
     var scn = baseScenario();
     var c1 = makeCommit('Initial commit', { touched: ['age_safe.py', 'README.md'], insertions: 12 });
     var c2 = makeCommit('Add sample test ages', { touched: ['ages.txt'], insertions: 5 });
     var c3 = makeCommit('Explain how to run it in README', { touched: ['README.md'], insertions: 2 });
-    var folder = clonedRepo('age-safe', REPO_URL, [
+    var folder = clonedRepo('age_safe', REPO_URL, [
       makeFile('age_safe.py', C.ageSafeV1, 'clean', true),
       makeFile('README.md', C.readme, 'clean', true),
       makeFile('ages.txt', C.agesTxt, 'clean', true)
@@ -310,35 +310,35 @@ window.GG = window.GG || {};
         fileUpdates: { 'age_safe.py': C.ageSafeV2 }
       })
     );
-    scn.folders['age-safe'] = folder;
-    scn.cwd = '~/age-safe';
+    scn.folders['age_safe'] = folder;
+    scn.cwd = '~/age_safe';
     return scn;
   }
 
-  /* Phase 3 — branching: try nested and parallel conditional rewrites */
-  function seed3() {
+  /* Phase 4 — branching: try nested and parallel conditional rewrites */
+  function seed4() {
     var scn = baseScenario();
     var commits = [
       makeCommit('Initial commit', { touched: ['age_safe.py', 'README.md'], insertions: 12 }),
       makeCommit('Add sample test ages', { touched: ['ages.txt'], insertions: 5 }),
       makeCommit('Switch to content ratings (complex conditionals)', { touched: ['age_safe.py'], insertions: 8 })
     ];
-    var folder = clonedRepo('age-safe', REPO_URL, [
+    var folder = clonedRepo('age_safe', REPO_URL, [
       makeFile('age_safe.py', C.ageSafeComplex, 'clean', true),
       makeFile('README.md', C.readme, 'clean', true),
       makeFile('ages.txt', C.agesTxt, 'clean', true)
     ], commits);
     // switching back to main restores main's version of the program
     folder.branchFiles = { main: { 'age_safe.py': C.ageSafeComplex } };
-    scn.folders['age-safe'] = folder;
-    scn.cwd = '~/age-safe';
+    scn.folders['age_safe'] = folder;
+    scn.cwd = '~/age_safe';
     return scn;
   }
 
-  /* Phase 4 — merging: parallel conditionals won; merge them into main.
+  /* Phase 5 — merging: parallel conditionals won; merge them into main.
      Deliberate conflict: main got a boundary bug-fix (pushed from the lab)
      touching the same lines the parallel rewrite replaced. */
-  function seed4() {
+  function seed5() {
     var scn = baseScenario();
     var c1 = makeCommit('Initial commit', { touched: ['age_safe.py', 'README.md'], insertions: 12 });
     var c2 = makeCommit('Switch to content ratings (complex conditionals)', { touched: ['age_safe.py'], insertions: 8 });
@@ -353,7 +353,7 @@ window.GG = window.GG || {};
     });
 
     var folder = {
-      name: 'age-safe',
+      name: 'age_safe',
       isRepo: true,
       branch: 'parallel-conditionals',
       branches: ['main', 'parallel-conditionals'],
@@ -376,8 +376,8 @@ window.GG = window.GG || {};
       },
       preMergeSnapshot: null
     };
-    scn.folders['age-safe'] = folder;
-    scn.cwd = '~/age-safe';
+    scn.folders['age_safe'] = folder;
+    scn.cwd = '~/age_safe';
     return scn;
   }
 
@@ -395,11 +395,11 @@ window.GG = window.GG || {};
     stagedFiles: stagedFiles,
     conflictedFiles: conflictedFiles,
     seeds: {
-      '1A': seed1A,
-      '1B': seed1B,
+      '1': seed1,
       '2': seed2,
       '3': seed3,
-      '4': seed4
+      '4': seed4,
+      '5': seed5
     }
   };
 })(window.GG);

@@ -1,8 +1,7 @@
 /* UI smoke test: drives the real page in headless Edge.
-   Types a full Phase 1A run + spot-checks tabs, panel, editor, paste block,
+   Types a full Phase 1 run + spot-checks tabs, panel, editor, paste block,
    and the Phase 4 parallel-conditionals merge. Age Safe edition. */
 
-const puppeteer = require('puppeteer-core');
 const path = require('path');
 
 const SHOTS = path.join(__dirname, 'shots');
@@ -15,11 +14,7 @@ function assert(cond, label) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch({
-    executablePath: process.env.EDGE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-    headless: 'new',
-    args: ['--no-sandbox']
-  });
+  const browser = await require('./launch-browser').launch();
   const page = await browser.newPage();
   await page.setViewport({ width: 1366, height: 900 });
 
@@ -56,17 +51,20 @@ function assert(cond, label) {
     await new Promise(r => setTimeout(r, 60));
   }
 
-  // --- Phase 1A drive-through ---
+  // --- Phase 1 drive-through ---
   await type('git status');
   assert((await bodyText()).includes('fatal: not a git repository'), 'typed status -> real fatal error shown');
 
-  await type('git clone https://github.com/student/age-safe.git');
-  assert((await bodyText()).includes("Cloning into 'age-safe'"), 'clone output printed');
+  await type('git clone https://github.com/student/age_safe.git');
+  assert((await bodyText()).includes("Cloning into 'age_safe'"), 'clone output printed');
   assert((await bodyText()).includes('skill complete'), 'praise line printed');
 
-  await type('cd age-safe');
+  await type('cd age_safe');
   const promptText = await bodyText();
-  assert(promptText.includes('PS C:\\CS1430\\age-safe>'), 'prompt shows PowerShell path');
+  assert(promptText.includes('PS C:\\CS1430\\age_safe>'), 'prompt shows PowerShell path');
+
+  await type('dir');
+  assert((await bodyText()).includes('age_safe.py'), 'dir lists files in age_safe directory');
 
   await type('git status');
 
@@ -81,7 +79,7 @@ function assert(cond, label) {
   }));
   assert(simpleMode.workedVisible && simpleMode.textareaHidden, 'Done Coding mode: message shown, no textarea');
   assert(simpleMode.buttonText === 'Done Coding', 'button says "Done Coding"');
-  assert(simpleMode.message.includes('worked hard to edit your code'), 'worked-hard message present');
+  assert(simpleMode.message.includes('be sure to save your work'), 'save-your-work message present');
   await page.click('#editor-save');
   await new Promise(r => setTimeout(r, 60));
   assert((await bodyText()).includes('Done coding! age_safe.py has changed'), 'Done Coding feedback printed');
@@ -97,10 +95,10 @@ function assert(cond, label) {
   await type('git commit -m "More changes"');
   await type('git push');
 
-  assert((await bodyText()).includes('PHASE 1A COMPLETE'), 'phase complete banner printed');
-  assert(await doneCount() === 8, 'all 8 skills checked off');
+  assert((await bodyText()).includes('PHASE 1 COMPLETE'), 'phase complete banner printed');
+  assert(await doneCount() === 9, 'all 9 skills checked off');
   const tabProgress = await page.$eval('.tab--active .tab__progress', el => el.textContent);
-  assert(tabProgress === '8/8', 'tab progress shows 8/8');
+  assert(tabProgress === '9/9', 'tab progress shows 9/9');
 
   // arrow-up history recall
   await page.click('.phase--active .terminal__body');
@@ -136,16 +134,16 @@ function assert(cond, label) {
   assert(await doneCount() === 0, 'reset clears skills');
   assert((await bodyText()).includes('phase reset'), 'reset message printed');
 
-  // --- tab switch to 1B and check seeded state ---
+  // --- tab switch to Phase 2 (connect your repo) and check seeded state ---
   const tabs = await page.$$('.tab');
   await tabs[1].click();
   await new Promise(r => setTimeout(r, 60));
   await type('ls');
-  assert((await bodyText()).includes('age-safe/'), '1B shows age-safe folder');
-  await type('cd age-safe');
+  assert((await bodyText()).includes('age_safe/'), 'Phase 2 shows age_safe folder');
+  await type('cd age_safe');
   await type('git status');
-  assert((await bodyText()).includes('fatal: not a git repository'), '1B status-before-init error');
-  assert(await doneCount() >= 2, '1B cd + fatal-error skills complete');
+  assert((await bodyText()).includes('fatal: not a git repository'), 'Phase 2 status-before-init error');
+  assert(await doneCount() >= 2, 'Phase 2 cd + fatal-error skills complete');
 
   // --- phase 3 snippet renders in hints ---
   await tabs[3].click();
@@ -198,7 +196,7 @@ function assert(cond, label) {
   await type('git commit -m "Merge parallel-conditionals"');
   await type('git push');
   await type('git branch -d parallel-conditionals');
-  assert((await bodyText()).includes('PHASE 4 COMPLETE'), 'phase 4 completes in UI');
+  assert((await bodyText()).includes('PHASE 5 COMPLETE'), 'phase 5 completes in UI');
   await page.screenshot({ path: path.join(SHOTS, '4-complete.png') });
 
   assert(errors.length === 0, 'no console/page errors' + (errors.length ? ': ' + errors.join(' | ') : ''));

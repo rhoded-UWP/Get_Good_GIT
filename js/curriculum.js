@@ -23,37 +23,45 @@ window.GG = window.GG || {};
   var phases = [
 
     /* =====================================================================
-       PHASE 1A — clone your repo, learn the basic loop
+       PHASE 1 — clone your repo, learn the basic loop
        ===================================================================== */
     {
-      id: '1A',
+      id: '1',
       tabLabel: 'Clone & Commit',
       title: 'Start from the cloud',
       brief: 'Your <strong>Age Safe</strong> starter repo (a small Python program) is already on your GitHub account. ' +
         'Copy it down to this computer, improve the program, and push your work back up. This is the daily loop you’ll use all semester. ' +
-        'Repo URL: ' + code('https://github.com/student/age-safe.git'),
+        'Repo URL: ' + code('https://github.com/student/age_safe.git'),
       welcome: [
-        'PHASE 1A — Clone & Commit',
+        'PHASE 1 — Clone & Commit',
         '',
-        'Goal: copy your Age Safe repo from GitHub, improve the',
+        'Goal: copy your Age Safe repo from GitHub, list your files,',
         'program, and push your changes back up.',
         '',
         'Follow the checklist on the left. Type help to see all commands.'
       ],
-      seedId: '1A',
+      seedId: '1',
       skills: [
         {
           id: 'clone',
           label: 'git clone <url>',
-          hint: 'Copy the repo down from GitHub. Type ' + code('git clone https://github.com/student/age-safe.git'),
+          hint: 'Copy the repo down from GitHub. Type ' + code('git clone https://github.com/student/age_safe.git'),
           check: function (ctx) { return ctx.name === 'git clone' && ctx.ok && ctx.meta.cloned; }
         },
         {
           id: 'cd',
-          label: 'cd age-safe',
-          hint: 'Cloning made a new folder, but you’re still standing outside it. Move inside with ' + code('cd age-safe') + ' — notice the prompt changes.',
+          label: 'cd age_safe',
+          hint: 'Cloning made a new folder, but you’re still standing outside it. Move inside with ' + code('cd age_safe') + ' — notice the prompt changes.',
           check: function (ctx) {
-            return ctx.name === 'cd' && ctx.ok && ctx.folder && ctx.folder.name === 'age-safe';
+            return ctx.name === 'cd' && ctx.ok && ctx.folder && ctx.folder.name === 'age_safe';
+          }
+        },
+        {
+          id: 'ls',
+          label: 'dir  (or ls)',
+          hint: 'See what you just cloned. Type ' + code('dir') + ' (or ' + code('ls') + ' — either works) to list the files in your ' + code('age_safe') + ' directory.',
+          check: function (ctx) {
+            return ctx.name === 'ls' && ctx.ok && ctx.folder && ctx.folder.name === 'age_safe';
           }
         },
         {
@@ -65,7 +73,7 @@ window.GG = window.GG || {};
         {
           id: 'add-one',
           label: 'git add <file>',
-          hint: 'First do some coding: type ' + code('edit age_safe.py') + ' and click <strong>Done Coding</strong>. Then stage JUST that file: ' + code('git add age_safe.py'),
+          hint: 'Type ' + code('edit age_safe.py') + ' and click <strong>Done Coding</strong> (the pop-up reminds you to save your work), then stage JUST that file: ' + code('git add age_safe.py'),
           check: function (ctx) {
             return ctx.name === 'git add' && ctx.ok && !ctx.meta.all && ctx.meta.staged && ctx.meta.staged.length > 0;
           }
@@ -103,18 +111,18 @@ window.GG = window.GG || {};
     },
 
     /* =====================================================================
-       PHASE 1B — connect YOUR code to YOUR empty repo
+       PHASE 2 — connect YOUR code to YOUR empty repo
        ===================================================================== */
     {
-      id: '1B',
+      id: '2',
       tabLabel: 'Connect Your Repo',
       title: 'Start from your own code',
-      brief: 'You wrote Age Safe on this laptop <em>before</em> learning Git — it lives in the ' + code('age-safe') + ' folder. ' +
+      brief: 'You wrote Age Safe on this laptop <em>before</em> learning Git — it lives in the ' + code('age_safe') + ' folder. ' +
         'You already created an <strong>empty</strong> repo on GitHub. Neither one knows the other exists yet. Your job: introduce them. ' +
-        'Your repo URL: ' + code('https://github.com/student/age-safe.git') +
+        'Your repo URL: ' + code('https://github.com/student/age_safe.git') +
         '<br><br><strong>Remember:</strong> this setup happens <em>once per project</em>. After it, every day is just add → commit → push.',
       welcome: [
-        'PHASE 1B — Connect Your Own Code to Your Own Repo',
+        'PHASE 2 — Connect Your Own Code to Your Own Repo',
         '',
         'This time nothing is coming down from the cloud. Your Python',
         'program is HERE, and an empty repo is waiting on GitHub.',
@@ -122,14 +130,14 @@ window.GG = window.GG || {};
         '',
         'Tip: try git status before git init — read what Git says.'
       ],
-      seedId: '1B',
+      seedId: '2',
       skills: [
         {
           id: 'cd',
-          label: 'cd age-safe',
+          label: 'cd age_safe',
           hint: 'Move into the folder where your program lives.',
           check: function (ctx) {
-            return ctx.name === 'cd' && ctx.ok && ctx.folder && ctx.folder.name === 'age-safe';
+            return ctx.name === 'cd' && ctx.ok && ctx.folder && ctx.folder.name === 'age_safe';
           }
         },
         {
@@ -137,7 +145,7 @@ window.GG = window.GG || {};
           label: 'see the "not a git repository" error',
           hint: 'Run ' + code('git status') + ' BEFORE ' + code('git init') + '. It will fail — on purpose. Read the error: this folder isn’t a repository yet. You will meet this error in real life; now you know what it means.',
           check: function (ctx) {
-            return ctx.meta.notARepo && ctx.folder && ctx.folder.name === 'age-safe';
+            return ctx.meta.notARepo && ctx.folder && ctx.folder.name === 'age_safe';
           }
         },
         {
@@ -170,7 +178,7 @@ window.GG = window.GG || {};
         {
           id: 'remote-add',
           label: 'git remote add origin <url>',
-          hint: 'The critical new step: tell your local repo where its GitHub home is. ' + code('git remote add origin https://github.com/student/age-safe.git') + ' — note that NOTHING prints. Silence means it worked.',
+          hint: 'The critical new step: tell your local repo where its GitHub home is. ' + code('git remote add origin https://github.com/student/age_safe.git') + ' — note that NOTHING prints. Silence means it worked.',
           check: function (ctx) { return ctx.name === 'git remote' && ctx.ok && ctx.meta.added; }
         },
         {
@@ -195,10 +203,10 @@ window.GG = window.GG || {};
     },
 
     /* =====================================================================
-       PHASE 2 — update program: same person, two computers, one repo
+       PHASE 3 — update program: same person, two computers, one repo
        ===================================================================== */
     {
-      id: '2',
+      id: '3',
       tabLabel: 'Update Program',
       title: 'Pull before you code',
       brief: 'Yesterday you worked on Age Safe from a <strong>campus lab computer</strong> and pushed an improvement ' +
@@ -206,7 +214,7 @@ window.GG = window.GG || {};
         '<strong>Habit to build:</strong> ' + code('git pull') + ' <em>before</em> you start working, every single time. ' +
         'Same person, two computers, one repo.',
       welcome: [
-        'PHASE 2 — Update Program',
+        'PHASE 3 — Update Program',
         '',
         'You pushed a change from the campus lab yesterday. Your',
         'laptop copy is out of date. Start the day the professional',
@@ -214,7 +222,7 @@ window.GG = window.GG || {};
         '',
         'Then: edit → add → commit → push. Twice. Make it automatic.'
       ],
-      seedId: '2',
+      seedId: '3',
       track: function (ctx, rt) {
         if (ctx.name === 'git push' && ctx.ok && ctx.meta.pushed) {
           rt.pushLoops = (rt.pushLoops || 0) + 1;
@@ -249,10 +257,10 @@ window.GG = window.GG || {};
     },
 
     /* =====================================================================
-       PHASE 3 — branching: try different conditional styles safely
+       PHASE 4 — branching: try different conditional styles safely
        ===================================================================== */
     {
-      id: '3',
+      id: '4',
       tabLabel: 'Branching',
       title: 'Try a different approach',
       brief: 'Age Safe currently rates content using <strong>complex conditionals</strong> — three separate ' +
@@ -260,7 +268,7 @@ window.GG = window.GG || {};
         'It works, but you suspect there’s a cleaner way. Branches let you try rewrites without risking the working program on ' +
         code('main') + ': one branch for a <strong>nested</strong> version, one for a <strong>parallel</strong> (if/elif/else) version.',
       welcome: [
-        'PHASE 3 — Branching',
+        'PHASE 4 — Branching',
         '',
         'A branch is a parallel universe for your code. Commits land',
         'on whichever branch you are standing on — watch the',
@@ -269,7 +277,7 @@ window.GG = window.GG || {};
         'main keeps working while you experiment. Start by seeing',
         'what branches exist: git branch'
       ],
-      seedId: '3',
+      seedId: '4',
       skills: [
         {
           id: 'list',
@@ -337,10 +345,10 @@ window.GG = window.GG || {};
     },
 
     /* =====================================================================
-       PHASE 4 — merging: crown the parallel-conditionals rewrite
+       PHASE 5 — merging: crown the parallel-conditionals rewrite
        ===================================================================== */
     {
-      id: '4',
+      id: '5',
       tabLabel: 'Merging',
       title: 'Merge the winner',
       brief: 'The experiments are in, and <strong>parallel conditionals won</strong> — one flat ' + code('if/elif/else') +
@@ -348,7 +356,7 @@ window.GG = window.GG || {};
         'But ' + code('main') + ' moved too: you fixed an age-boundary bug from the lab computer and pushed it. Same lines, two versions — ' +
         'merging will <strong>conflict</strong>, deliberately. The first conflict of your life is scary; the second one is Tuesday. Have your first one here.',
       welcome: [
-        'PHASE 4 — Merging',
+        'PHASE 5 — Merging',
         '',
         'You are on branch parallel-conditionals. The winning rewrite',
         'is committed. Time to crown it: merge it into main.',
@@ -358,7 +366,7 @@ window.GG = window.GG || {};
         '',
         'Step 1: get back onto main.'
       ],
-      seedId: '4',
+      seedId: '5',
       skills: [
         {
           id: 'switch-main',

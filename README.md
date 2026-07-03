@@ -38,11 +38,11 @@ repetition is the pedagogy.
 
 | Tab | Focus |
 |-----|-------|
-| **1A — Clone & Commit** | `clone`, `cd`, `status`, `add`, `commit`, `push` — the daily loop, starting from your Age Safe repo on GitHub |
-| **1B — Connect Your Repo** | `init`, `remote add origin`, `remote -v`, `branch -M main`, `push -u` — linking local code to an empty GitHub repo (starts on `master` so the rename is meaningful) |
-| **2 — Update Program** | `pull` first (you pushed from the lab computer yesterday), `log --oneline`, drilling the loop twice |
-| **3 — Branching** | Try rewrites safely: `branch`/`switch` onto `nested-conditionals`, commit, `switch -c parallel-conditionals`, `push -u origin <branch>` — with conditional-style code examples in the hints |
-| **4 — Merging** | Parallel conditionals won: `switch main`, `pull` (boundary bug-fix), `merge parallel-conditionals` hits a **deliberate conflict** on the same lines, keep the `if/elif/else` version, `branch -d` |
+| **1 — Clone & Commit** | `clone`, `cd`, `dir`/`ls`, `status`, `add`, `commit`, `push` — the daily loop, starting from your Age Safe repo on GitHub |
+| **2 — Connect Your Repo** | `init`, `remote add origin`, `remote -v`, `branch -M main`, `push -u` — linking local code to an empty GitHub repo (starts on `master` so the rename is meaningful) |
+| **3 — Update Program** | `pull` first (you pushed from the lab computer yesterday), `log --oneline`, drilling the loop twice |
+| **4 — Branching** | Try rewrites safely: `branch`/`switch` onto `nested-conditionals`, commit, `switch -c parallel-conditionals`, `push -u origin <branch>` — with conditional-style code examples in the hints |
+| **5 — Merging** | Parallel conditionals won: `switch main`, `pull` (boundary bug-fix), `merge parallel-conditionals` hits a **deliberate conflict** on the same lines, keep the `if/elif/else` version, `branch -d` |
 
 ## Architecture
 

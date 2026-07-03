@@ -58,21 +58,22 @@ The parser must:
 
 ## Curriculum: Phases and Skills
 
-The simulator is divided into four phases, each a tab. Phase 1 has two tracks (1A and 1B). Each skill below is a discrete, checkable step the student practices.
+The simulator is divided into five phases, each a tab. Each skill below is a discrete, checkable step the student practices.
 
-### Phase 1A — Clone an Existing Repo (the basic loop)
+### Phase 1 — Clone an Existing Repo (the basic loop)
 
 The "start from the cloud" path. Student copies an existing remote repo down and practices the core commit loop.
 
 - `git clone <url>` — copy an existing remote repo to local
 - `cd <repo>` — navigate into the project folder
+- `dir` / `ls` — list the files in the cloned directory (get in the habit of looking)
 - `git status` — check the current state
 - `git add <file>` — stage a single file
 - `git add .` — stage all changes
 - `git commit -m "message"` — save a snapshot
 - `git push` — upload commits to GitHub
 
-### Phase 1B — Connect Your Own Code to Your Own Repo
+### Phase 2 — Connect Your Own Code to Your Own Repo
 
 The "start from local" path, and the workflow students will actually use for their coursework. They have an empty GitHub repo already created and want to push their existing local code up to it so they can access it from any computer.
 
@@ -90,15 +91,15 @@ The "start from local" path, and the workflow students will actually use for the
 
 **After setup, collapse back to the daily loop.** Make it explicit to students that `init` / `remote add` / `branch -M` / first `-u` push happen **once per project**, and every day after that is just the three commands they already learned: `git add .` → `git commit -m "..."` → `git push`.
 
-**State requirement specific to 1B:** model a folder that is *not yet a repo*, so `git status` before `git init` errors with the real "not a git repository" message. Then transition through three stages: (1) not a repo → (2) initialized but no remote → (3) linked to remote. Triggering the correct error at each wrong moment is the whole lesson.
+**State requirement specific to Phase 2:** model a folder that is *not yet a repo*, so `git status` before `git init` errors with the real "not a git repository" message. Then transition through three stages: (1) not a repo → (2) initialized but no remote → (3) linked to remote. Triggering the correct error at each wrong moment is the whole lesson.
 
-### Phase 2 — Staying in Sync
+### Phase 3 — Staying in Sync
 
 - `git pull` — download remote changes before working (teach this as a habit done *before* starting work, to prevent conflicts)
 - `git log --oneline` — view commit history as a compact list
 - Drill: repeat add → commit → push until it is automatic
 
-### Phase 3 — Branching
+### Phase 4 — Branching
 
 - `git branch` — list branches and see the current one
 - `git branch <name>` — create a branch
@@ -107,7 +108,7 @@ The "start from local" path, and the workflow students will actually use for the
 - `git add` / `git commit` on a branch — show that commits land on the active branch
 - `git push -u origin <name>` — push the branch and set its upstream
 
-### Phase 4 — Merging
+### Phase 5 — Merging
 
 - `git switch main` — return to main
 - `git pull` — update main before merging
@@ -129,7 +130,7 @@ These shape *how* the simulator teaches, beyond just parsing commands.
 
 ## Suggested Build Order (for whoever implements this)
 
-Start with **Phase 1 fully functional** (both 1A and 1B): mock terminal, the state model above, realistic Git output and errors, the visible state panel, and checkpoint detection. This establishes the pattern. Once Phase 1 feels right, scale the same architecture to Phases 2, 3, and 4 by extending the state model (branches, remote divergence, conflicts) and adding the new commands.
+Start with **Phase 1 fully functional**: mock terminal, the state model above, realistic Git output and errors, the visible state panel, and checkpoint detection. This establishes the pattern. Once Phase 1 feels right, scale the same architecture to Phases 2 through 5 by extending the state model (branches, remote divergence, conflicts) and adding the new commands.
 
 ## Out of Scope
 

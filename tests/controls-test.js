@@ -1,7 +1,6 @@
 /* Control bar test: score API, font +/- with clamps + persistence,
    theme toggle + persistence + system-preference default, sticky layout. */
 
-const puppeteer = require('puppeteer-core');
 const path = require('path');
 
 let failures = 0;
@@ -11,11 +10,7 @@ function assert(cond, label) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch({
-    executablePath: process.env.EDGE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-    headless: 'new',
-    args: ['--no-sandbox']
-  });
+  const browser = await require('./launch-browser').launch();
   const page = await browser.newPage();
   await page.setViewport({ width: 1366, height: 900 });
 

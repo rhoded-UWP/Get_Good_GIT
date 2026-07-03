@@ -3,8 +3,6 @@
    the Reset button. Also verify it does NOT false-positive while the editor
    modal is open. */
 
-const puppeteer = require('puppeteer-core');
-
 let failures = 0;
 function assert(cond, label) {
   console.log((cond ? '  ok  ' : '  FAIL ') + label);
@@ -12,11 +10,7 @@ function assert(cond, label) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch({
-    executablePath: process.env.EDGE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-    headless: 'new',
-    args: ['--no-sandbox']
-  });
+  const browser = await require('./launch-browser').launch();
   const page = await browser.newPage();
   await page.setViewport({ width: 1366, height: 900 });
   const errors = [];
@@ -31,7 +25,7 @@ function assert(cond, label) {
   }
 
   // build some progress first
-  await type('git clone https://github.com/student/age-safe.git');
+  await type('git clone https://github.com/student/age_safe.git');
   assert((await page.$$('.phase--active .skill--done')).length >= 1, 'progress before blank');
 
   // --- scenario 1: scrollback wiped (screen went blank) ---
@@ -47,7 +41,7 @@ function assert(cond, label) {
       done: document.querySelectorAll('.phase--active .skill--done').length
     };
   });
-  assert(state.text.includes('reset to a clean start') && state.text.includes('PHASE 1A'),
+  assert(state.text.includes('reset to a clean start') && state.text.includes('PHASE 1'),
     'wiped scrollback -> watchdog auto-reset with explanation');
   assert(state.hasInput, 'live prompt restored');
   assert(state.done === 0, 'skills reset like the Reset button');
@@ -70,8 +64,8 @@ function assert(cond, label) {
     'dead input -> watchdog auto-reset restores a prompt');
 
   // --- scenario 3: editor open must NOT trigger the watchdog ---
-  await type('git clone https://github.com/student/age-safe.git');
-  await type('cd age-safe');
+  await type('git clone https://github.com/student/age_safe.git');
+  await type('cd age_safe');
   await type('edit age_safe.py');
   await page.waitForSelector('#editor:not([hidden])');
   await new Promise(r => setTimeout(r, 2600)); // watchdog ticks while modal open

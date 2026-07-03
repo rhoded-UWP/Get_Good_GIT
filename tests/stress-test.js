@@ -2,7 +2,6 @@
    command volume, and natural-language typing. After each abuse, check the
    terminal still shows content and a live prompt. */
 
-const puppeteer = require('puppeteer-core');
 const path = require('path');
 
 let failures = 0;
@@ -12,11 +11,7 @@ function assert(cond, label) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch({
-    executablePath: process.env.EDGE_PATH || 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-    headless: 'new',
-    args: ['--no-sandbox']
-  });
+  const browser = await require('./launch-browser').launch();
   const page = await browser.newPage();
   await page.setViewport({ width: 1366, height: 900 });
   const errors = [];
@@ -116,7 +111,7 @@ function assert(cond, label) {
   await health('after clear (prompt remains)');
 
   // 7: forced internal failure -> auto phase reset (same as Reset button)
-  await type('git clone https://github.com/student/age-safe.git'); // make some progress first
+  await type('git clone https://github.com/student/age_safe.git'); // make some progress first
   const doneBefore = (await page.$$('.phase--active .skill--done')).length;
   assert(doneBefore >= 1, 'progress exists before forced failure (done=' + doneBefore + ')');
   await page.evaluate(() => {
@@ -128,7 +123,7 @@ function assert(cond, label) {
     const t = document.querySelector('.phase--active .terminal__body').textContent;
     return {
       notice: t.includes('reset to a clean start'),
-      banner: t.includes('PHASE 1A'),
+      banner: t.includes('PHASE 1'),
       done: document.querySelectorAll('.phase--active .skill--done').length
     };
   });

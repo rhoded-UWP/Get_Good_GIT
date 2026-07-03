@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="controlbar">
+  <div class="controlbar" role="region" aria-label="Score and display settings">
     <div class="controlbar__inner">
       <div class="controlbar__score">
         <span class="controlbar__score-label">Score</span>
@@ -46,7 +46,9 @@
       <p class="header__subtitle">Practice real Git commands in a fake terminal. Nothing here can break — type freely.</p>
     </header>
 
-    <nav class="tabs" role="tablist" aria-label="Curriculum phases" id="tabs"></nav>
+    <nav aria-label="Curriculum phases">
+      <div class="tabs" role="tablist" aria-label="Curriculum phases" id="tabs"></div>
+    </nav>
 
     <main class="phases" id="phases"></main>
 
@@ -73,7 +75,7 @@
       </p>
       <div class="editor__worked" id="editor-worked" hidden>
         <svg class="editor__worked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
-        <p class="editor__worked-text">You’ve worked hard to edit your code&hellip;</p>
+        <p class="editor__worked-text">First do some coding, be sure to save your work.</p>
         <p class="editor__worked-sub">Click <strong>“Done Coding”</strong> to continue.</p>
       </div>
       <textarea class="editor__textarea" id="editor-textarea" spellcheck="false" aria-label="File contents"></textarea>

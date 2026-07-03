@@ -10,9 +10,11 @@
     "stress": "node stress-test.js",
     "watchdog": "node watchdog-test.js",
     "overflow": "node overflow-test.js",
-    "all": "node test.js && node fuzz.js && node ui-test.js && node controls-test.js && node stress-test.js && node watchdog-test.js && node overflow-test.js"
+    "a11y": "node a11y-test.js",
+    "all": "node test.js && node fuzz.js && node ui-test.js && node controls-test.js && node stress-test.js && node watchdog-test.js && node overflow-test.js && node a11y-test.js"
   },
   "dependencies": {
+    "axe-core": "^4.10.0",
     "puppeteer-core": "^23.0.0"
   }
 }

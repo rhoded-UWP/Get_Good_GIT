@@ -16,8 +16,8 @@ const vocab = [
   'git', 'clone', 'init', 'status', 'add', 'commit', 'push', 'pull', 'log',
   'branch', 'switch', 'checkout', 'merge', 'remote', '-m', '-u', '-M', '-d',
   '-c', '-b', '-v', '--oneline', '--abort', '--all', '.', '..', 'origin',
-  'main', 'master', 'age-safe', 'age_safe.py', 'README.md', 'ages.txt',
-  'https://github.com/student/age-safe.git', 'nested-conditionals',
+  'main', 'master', 'age_safe', 'age_safe.py', 'README.md', 'ages.txt',
+  'https://github.com/student/age_safe.git', 'nested-conditionals',
   'parallel-conditionals', 'ls', 'cd', 'cat', 'edit', 'touch', 'pwd',
   'clear', 'help', '"hello world"', '"', "'", '""', "''", '-', '--', '---',
   'nonsense', '<script>', '&&', '|', ';', '$(rm -rf)', '`x`', '\\', '/',
@@ -51,7 +51,7 @@ function randomLine() {
 let crashes = 0;
 let runs = 0;
 
-for (const seedId of ['1A', '1B', '2', '3', '4']) {
+for (const seedId of ['1', '2', '3', '4', '5']) {
   for (let trial = 0; trial < 40; trial++) {
     const scn = GG.state.seeds[seedId]();
     for (let i = 0; i < 60; i++) {
@@ -90,10 +90,10 @@ const targeted = [
   'git  status',
   'git status ' + '--verbose '.repeat(100)
 ];
-for (const seedId of ['1A', '2', '4']) {
+for (const seedId of ['1', '3', '5']) {
   const scn = GG.state.seeds[seedId]();
-  GG.git.run('git clone https://github.com/student/age-safe.git', scn);
-  GG.git.run('cd age-safe', scn);
+  GG.git.run('git clone https://github.com/student/age_safe.git', scn);
+  GG.git.run('cd age_safe', scn);
   for (const line of targeted) {
     runs++;
     try {
