@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get Good @ GIT — Terminal Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="controlbar">
+    <div class="controlbar__inner">
+      <div class="controlbar__score">
+        <span class="controlbar__score-label">Score</span>
+        <span class="controlbar__score-value" id="controlbar-score" aria-live="polite">0</span>
+      </div>
+      <div class="controlbar__group" role="group" aria-label="Font size">
+        <button class="controlbar__btn" type="button" id="font-minus" aria-label="Decrease font size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+        </button>
+        <span class="controlbar__font-label"><span class="controlbar__font-word">Font</span> <span class="controlbar__font-value" id="font-value">16px</span></span>
+        <button class="controlbar__btn" type="button" id="font-plus" aria-label="Increase font size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <button class="controlbar__btn controlbar__btn--theme" type="button" id="theme-toggle" aria-label="Switch to light mode">
+        <svg class="controlbar__icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="controlbar__icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="app">
+    <header class="header">
+      <div class="header__title-row">
+        <svg class="header__logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="5" cy="6" r="2.2"/>
+          <circle cx="5" cy="18" r="2.2"/>
+          <circle cx="17" cy="9" r="2.2"/>
+          <path d="M5 8.2v7.6"/>
+          <path d="M15.4 10.4 7 16.4"/>
+        </svg>
+        <h1 class="header__title">get good <span class="header__title-accent">@ GIT</span><span class="header__cursor" aria-hidden="true"></span></h1>
+      </div>
+      <p class="header__subtitle">Practice real Git commands in a fake terminal. Nothing here can break — type freely.</p>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Curriculum phases" id="tabs"></nav>
+
+    <main class="phases" id="phases"></main>
+
+    <footer class="footer">
+      <p class="footer__note">Progress lives in this page only and resets on reload — repetition is the point. Type <span class="footer__code">help</span> in the terminal to see every available command.</p>
+    </footer>
+  </div>
+
+  <div class="editor" id="editor" hidden>
+    <div class="editor__backdrop" data-editor-cancel></div>
+    <div class="editor__window" role="dialog" aria-modal="true" aria-labelledby="editor-filename">
+      <div class="editor__titlebar">
+        <svg class="editor__file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>
+        </svg>
+        <span class="editor__filename" id="editor-filename">file.txt</span>
+        <span class="editor__badge" id="editor-badge" hidden>merge conflict</span>
+        <button class="editor__close" type="button" data-editor-cancel aria-label="Close editor without saving">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <p class="editor__conflict-help" id="editor-conflict-help" hidden>
+        Keep the code you want. Delete the <span class="editor__marker">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>, <span class="editor__marker">=======</span>, and <span class="editor__marker">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> marker lines — they are Git's way of showing both versions.
+      </p>
+      <textarea class="editor__textarea" id="editor-textarea" spellcheck="false" aria-label="File contents"></textarea>
+      <div class="editor__actions">
+        <button class="btn btn--ghost" type="button" data-editor-cancel>Cancel</button>
+        <button class="btn btn--primary" type="button" id="editor-save">Save &amp; Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/controlbar.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/git.js"></script>
+  <script src="js/curriculum.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/panel.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
