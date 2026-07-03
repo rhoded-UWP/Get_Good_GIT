@@ -98,7 +98,16 @@ window.GG = window.GG || {};
 
     switch (cmd) {
       case 'help': return doHelp();
-      case 'clear': case 'cls': return { lines: [], ok: true, name: 'clear', meta: { clear: true } };
+      case 'clear': case 'cls':
+        // real PowerShell rejects arguments — and this stops a sentence that
+        // happens to start with "clear" from wiping the whole screen
+        if (args.length) {
+          return {
+            lines: [L("Clear-Host: A positional parameter cannot be found that accepts argument '" + args[0] + "'.", 'err')],
+            ok: false, name: 'clear', meta: {}
+          };
+        }
+        return { lines: [], ok: true, name: 'clear', meta: { clear: true } };
       case 'pwd':
         return {
           lines: [L(''), L('Path'), L('----'), L(S.winPath(scn)), L('')],

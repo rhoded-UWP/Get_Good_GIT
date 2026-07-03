@@ -43,6 +43,8 @@ window.GG = window.GG || {};
     });
   }
 
+  var MAX_SCROLLBACK = 2500; // lines; marathon sessions must not bloat the DOM
+
   Terminal.prototype.print = function (lines) {
     var self = this;
     (lines || []).forEach(function (line) {
@@ -51,6 +53,9 @@ window.GG = window.GG || {};
       el.textContent = line.t;
       self.body.appendChild(el);
     });
+    while (this.body.children.length > MAX_SCROLLBACK) {
+      this.body.removeChild(this.body.firstChild);
+    }
     this.scrollDown();
   };
 
@@ -158,6 +163,8 @@ window.GG = window.GG || {};
     if (pos < value.length) {
       echo.appendChild(document.createTextNode(value.slice(pos + 1)));
     }
+    // long lines wrap; keep the caret in view while typing
+    this.scrollDown();
   };
 
   Terminal.prototype.handleKey = function (e) {

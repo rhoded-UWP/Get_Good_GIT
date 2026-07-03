@@ -143,7 +143,7 @@ window.GG = window.GG || {};
     phase.terminal.prompt();
   }
 
-  function reset(phase) {
+  function reset(phase, noticeLines) {
     phase.scenario = GG.state.seeds[phase.def.seedId]();
     phase.rt = {};
     phase.complete = false;
@@ -152,43 +152,67 @@ window.GG = window.GG || {};
     phase.terminal.clear();
     phase.terminal.history = [];
     phase.terminal.printBanner(phase.def.welcome);
-    phase.terminal.print([{ t: '(phase reset — fresh start, same mission)', c: 'muted' }, { t: '', c: '' }]);
+    phase.terminal.print(noticeLines || [{ t: '(phase reset — fresh start, same mission)', c: 'muted' }, { t: '', c: '' }]);
     renderMission(phase);
     updateTabProgress(phase);
     GG.panel.render(phase.panelEl, phase.scenario);
     phase.terminal.prompt();
   }
 
+  /** last-resort recovery: if anything throws while handling a command, the
+      terminal must never be left dead/blank — reset the phase instead,
+      exactly like pressing the Reset button */
+  function runSafely(phase, fn) {
+    try {
+      fn();
+    } catch (err) {
+      try {
+        reset(phase, [
+          { t: '(simulator) Something went wrong under the hood, so this phase was reset to a clean start — same as pressing "Reset phase".', c: 'warn' },
+          { t: '(simulator) Your progress in the other tabs is untouched.', c: 'muted' },
+          { t: '', c: '' }
+        ]);
+      } catch (err2) { /* nothing left to do — never rethrow into the input handler */ }
+    }
+  }
+
   /* ---- the core loop: run command → check skills → re-render -------------- */
 
   function handleCommand(phase, line) {
-    var result = GG.git.run(line, phase.scenario);
+    runSafely(phase, function () {
+      var result = GG.git.run(line, phase.scenario);
 
-    if (result.meta.clear) {
-      phase.terminal.clear();
-    } else {
-      phase.terminal.print(result.lines);
-    }
+      if (result.meta.clear) {
+        phase.terminal.clear();
+        phase.terminal.print([
+          { t: '(screen cleared — your files, commits, and progress are all untouched; the panel on the right still shows everything)', c: 'muted' }
+        ]);
+      } else {
+        phase.terminal.print(result.lines);
+      }
 
-    // the edit command opens the modal editor; everything else finishes now
-    if (result.meta.openEditor) {
-      var folder = GG.state.currentFolder(phase.scenario);
-      GG.editor.open({
-        folder: folder,
-        fileName: result.meta.openEditor.fileName,
-        isNew: result.meta.openEditor.isNew,
-        onDone: function (res) {
-          phase.terminal.print(editorFeedback(res));
-          afterCommand(phase, { name: 'edit', ok: res.saved, meta: { edited: res.fileName, changed: res.changed } });
-        }
+      // the edit command opens the modal editor; everything else finishes now
+      if (result.meta.openEditor) {
+        var folder = GG.state.currentFolder(phase.scenario);
+        GG.editor.open({
+          folder: folder,
+          fileName: result.meta.openEditor.fileName,
+          isNew: result.meta.openEditor.isNew,
+          onDone: function (res) {
+            runSafely(phase, function () {
+              phase.terminal.print(editorFeedback(res));
+              afterCommand(phase, { name: 'edit', ok: res.saved, meta: { edited: res.fileName, changed: res.changed } });
+            });
+          }
+        });
+        return;
+      }
+
+      afterCommand(phase, {
+        name: result.name,
+        ok: result.ok,
+        meta: result.meta
       });
-      return;
-    }
-
-    afterCommand(phase, {
-      name: result.name,
-      ok: result.ok,
-      meta: result.meta
     });
   }
 
