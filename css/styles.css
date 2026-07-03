@@ -89,20 +89,12 @@ body {
                     radial-gradient(ellipse 60% 40% at 90% 110%, rgba(3, 105, 161, 0.04), transparent);
 }
 
-/* Faint scanlines, scoped to the terminal card only. This was previously a
-   position:fixed overlay across the whole viewport — a giant composited
-   layer sitting above scrolling content, which risks GPU blank-outs on some
-   Windows machines. Keeping it local and non-fixed removes that risk. */
-.terminal::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg, rgba(248, 250, 252, 0.012) 0 1px, transparent 1px 3px);
-  border-radius: inherit;
-}
-
-[data-theme='light'] .terminal::after { display: none; }
+/* NOTE: the decorative scanline overlay that used to live here (first
+   position:fixed over the viewport, then scoped to the terminal card) is
+   gone for good. A translucent overlay above a scrolling region kept
+   triggering GPU compositing blank-outs on real Windows/Edge hardware —
+   the DOM stayed healthy while the terminal painted as an empty box.
+   No decoration is worth a blank terminal in a classroom. */
 
 /* ==========================================================================
    Control bar (sticky, above the header)
@@ -723,6 +715,11 @@ body {
   cursor: text;
   scrollbar-width: thin;
   scrollbar-color: var(--vsc-fg-dim) transparent;
+  /* pin this scroller onto its own permanent GPU layer: Edge on some Windows
+     hardware blanks the whole terminal when it re-layerizes mid-scroll */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout paint;
 }
 
 .terminal__line {

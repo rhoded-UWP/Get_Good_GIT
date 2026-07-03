@@ -199,7 +199,10 @@ window.GG = window.GG || {};
   }
 
   /** watchdog: whatever the cause — a bug, a rendering glitch, anything —
-      if the active phase's terminal is ever found blank, auto-reset it */
+      if the active phase's terminal is ever found blank, auto-reset it.
+      GPU paint failures are invisible to the DOM, so also nudge the
+      scroller each tick to force the layer to re-rasterize (self-heals a
+      terminal that is full of content but painting as an empty box). */
   function watchdogTick() {
     if (isEditorOpen()) return;
     phases.forEach(function (p) {
@@ -208,6 +211,13 @@ window.GG = window.GG || {};
         try {
           reset(p, RECOVERY_NOTICE);
         } catch (err) { /* next tick tries again */ }
+        return;
+      }
+      var body = p.rootEl.querySelector('.terminal__body');
+      if (body && body.scrollHeight > body.clientHeight) {
+        var top = body.scrollTop;
+        body.scrollTop = top > 0 ? top - 1 : top + 1;
+        body.scrollTop = top;
       }
     });
   }
