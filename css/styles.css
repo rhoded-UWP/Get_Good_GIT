@@ -89,17 +89,20 @@ body {
                     radial-gradient(ellipse 60% 40% at 90% 110%, rgba(3, 105, 161, 0.04), transparent);
 }
 
-/* faint scanlines to sell the terminal fantasy — imperceptible on cheap panels, free on GPU */
-body::after {
+/* Faint scanlines, scoped to the terminal card only. This was previously a
+   position:fixed overlay across the whole viewport — a giant composited
+   layer sitting above scrolling content, which risks GPU blank-outs on some
+   Windows machines. Keeping it local and non-fixed removes that risk. */
+.terminal::after {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   background: repeating-linear-gradient(0deg, rgba(248, 250, 252, 0.012) 0 1px, transparent 1px 3px);
-  z-index: 999;
+  border-radius: inherit;
 }
 
-[data-theme='light'] body::after { display: none; }
+[data-theme='light'] .terminal::after { display: none; }
 
 /* ==========================================================================
    Control bar (sticky, above the header)

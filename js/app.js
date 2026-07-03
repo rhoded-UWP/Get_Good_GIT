@@ -39,6 +39,7 @@ window.GG = window.GG || {};
     });
 
     activate(phases[0].def.id);
+    setInterval(watchdogTick, 2000);
   }
 
   /* ---- build one phase's DOM + runtime ----------------------------------- */
@@ -159,21 +160,56 @@ window.GG = window.GG || {};
     phase.terminal.prompt();
   }
 
+  var RECOVERY_NOTICE = [
+    { t: '(simulator) The terminal display had a problem, so this phase was reset to a clean start — same as pressing "Reset phase".', c: 'warn' },
+    { t: '(simulator) Your progress in the other tabs is untouched.', c: 'muted' },
+    { t: '', c: '' }
+  ];
+
   /** last-resort recovery: if anything throws while handling a command, the
       terminal must never be left dead/blank — reset the phase instead,
       exactly like pressing the Reset button */
   function runSafely(phase, fn) {
     try {
       fn();
+      // belt-and-braces: verify the command left a usable terminal behind
+      if (!isEditorOpen() && terminalBlank(phase)) {
+        reset(phase, RECOVERY_NOTICE);
+      }
     } catch (err) {
       try {
-        reset(phase, [
-          { t: '(simulator) Something went wrong under the hood, so this phase was reset to a clean start — same as pressing "Reset phase".', c: 'warn' },
-          { t: '(simulator) Your progress in the other tabs is untouched.', c: 'muted' },
-          { t: '', c: '' }
-        ]);
+        reset(phase, RECOVERY_NOTICE);
       } catch (err2) { /* nothing left to do — never rethrow into the input handler */ }
     }
+  }
+
+  function isEditorOpen() {
+    var el = document.getElementById('editor');
+    return !!el && !el.hidden;
+  }
+
+  /** a healthy terminal always has visible scrollback text and a live input
+      (except while the editor modal is open, when the input is paused) */
+  function terminalBlank(phase) {
+    var body = phase.rootEl.querySelector('.terminal__body');
+    if (!body) return true;
+    if (body.textContent.trim().length === 0) return true;
+    if (!body.querySelector('.terminal__input')) return true;
+    return false;
+  }
+
+  /** watchdog: whatever the cause — a bug, a rendering glitch, anything —
+      if the active phase's terminal is ever found blank, auto-reset it */
+  function watchdogTick() {
+    if (isEditorOpen()) return;
+    phases.forEach(function (p) {
+      if (!p.booted || p.def.id !== activeId) return;
+      if (terminalBlank(p)) {
+        try {
+          reset(p, RECOVERY_NOTICE);
+        } catch (err) { /* next tick tries again */ }
+      }
+    });
   }
 
   /* ---- the core loop: run command → check skills → re-render -------------- */
