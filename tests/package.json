@@ -1,0 +1,18 @@
+{
+  "name": "get-good-git-tests",
+  "private": true,
+  "description": "Test suites for the Get Good @ GIT terminal simulator",
+  "scripts": {
+    "engine": "node test.js",
+    "fuzz": "node fuzz.js",
+    "ui": "node ui-test.js",
+    "controls": "node controls-test.js",
+    "stress": "node stress-test.js",
+    "watchdog": "node watchdog-test.js",
+    "overflow": "node overflow-test.js",
+    "all": "node test.js && node fuzz.js && node ui-test.js && node controls-test.js && node stress-test.js && node watchdog-test.js && node overflow-test.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^23.0.0"
+  }
+}
