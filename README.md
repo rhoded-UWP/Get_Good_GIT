@@ -1,5 +1,7 @@
 # Get Good @ GIT — Terminal Simulator
 
+https://rhoded-uwp.github.io/Get_Good_GIT/
+
 A browser-based, zero-install simulator where intro CS students practice real
 Git/GitHub terminal commands against a fake in-memory repository. Students type
 real commands; the simulator validates them **in context** and prints what real
