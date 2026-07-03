@@ -226,13 +226,13 @@ window.GG = window.GG || {};
     if (res.wasConflicted && !res.markersGone) {
       return [{ t: '(simulator) Saved, but ' + res.fileName + ' still contains <<<<<<< markers. Open it again and delete the marker lines.', c: 'warn' }];
     }
-    if (res.isNew) {
-      return [{ t: '(simulator) Created ' + res.fileName + '. It’s a brand-new file — Git sees it as untracked.', c: 'muted' }];
+    if (res.doneCoding && res.isNew) {
+      return [{ t: '(simulator) Done coding! ' + res.fileName + ' is a brand-new file — Git sees it as untracked.', c: 'muted' }];
     }
-    if (res.changed) {
-      return [{ t: '(simulator) Saved ' + res.fileName + '. Run git status to see how Git noticed.', c: 'muted' }];
+    if (res.doneCoding) {
+      return [{ t: '(simulator) Done coding! ' + res.fileName + ' has changed. Run git status to see how Git noticed.', c: 'muted' }];
     }
-    return [{ t: '(simulator) Saved ' + res.fileName + ' with no changes.', c: 'muted' }];
+    return [{ t: '(simulator) Saved ' + res.fileName + '.', c: 'muted' }];
   }
 
   function afterCommand(phase, ctxBase) {

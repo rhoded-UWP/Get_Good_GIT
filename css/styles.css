@@ -1143,6 +1143,38 @@ body::after {
   font-size: 0.78em;
 }
 
+/* simple "Done Coding" mode: no typing, just acknowledge the work */
+.editor__worked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.editor__worked-icon {
+  width: 34px;
+  height: 34px;
+  color: var(--color-accent);
+  filter: drop-shadow(var(--glow-accent));
+}
+
+.editor__worked-text {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.editor__worked-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.editor__worked[hidden] { display: none; }
+
 .editor__textarea {
   background: var(--color-background);
   color: var(--color-foreground);
@@ -1159,6 +1191,8 @@ body::after {
 }
 
 .editor__textarea:focus-visible { box-shadow: inset 0 0 0 2px var(--color-accent-dim); }
+
+.editor__textarea[hidden] { display: none; }
 
 .editor__actions {
   display: flex;

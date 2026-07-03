@@ -65,7 +65,7 @@ window.GG = window.GG || {};
         {
           id: 'add-one',
           label: 'git add <file>',
-          hint: 'First make a change: type ' + code('edit age_safe.py') + ', tweak the program (change the ride age, reword a message), and save. Then stage JUST that file: ' + code('git add age_safe.py'),
+          hint: 'First do some coding: type ' + code('edit age_safe.py') + ' and click <strong>Done Coding</strong>. Then stage JUST that file: ' + code('git add age_safe.py'),
           check: function (ctx) {
             return ctx.name === 'git add' && ctx.ok && !ctx.meta.all && ctx.meta.staged && ctx.meta.staged.length > 0;
           }
@@ -79,7 +79,7 @@ window.GG = window.GG || {};
         {
           id: 'add-all',
           label: 'git add .',
-          hint: 'Now change TWO files (' + code('edit README.md') + ' and ' + code('edit ages.txt') + '), then stage everything at once with ' + code('git add .'),
+          hint: 'Now change TWO files (' + code('edit README.md') + ' and ' + code('edit ages.txt') + ' — click <strong>Done Coding</strong> for each), then stage everything at once with ' + code('git add .'),
           check: function (ctx) {
             return ctx.name === 'git add' && ctx.ok && ctx.meta.all && ctx.meta.staged && ctx.meta.staged.length > 0;
           }
@@ -236,7 +236,7 @@ window.GG = window.GG || {};
         {
           id: 'loop1',
           label: 'loop #1: edit → add → commit → push',
-          hint: 'Improve the program (' + code('edit age_safe.py') + '), then ' + code('git add .') + ', ' + code('git commit -m "..."') + ', ' + code('git push') + '.',
+          hint: 'Improve the program (' + code('edit age_safe.py') + ', then <strong>Done Coding</strong>), then ' + code('git add .') + ', ' + code('git commit -m "..."') + ', ' + code('git push') + '.',
           check: function (ctx, rt) { return (rt.pushLoops || 0) >= 1; }
         },
         {
@@ -292,7 +292,7 @@ window.GG = window.GG || {};
         {
           id: 'commit-on-branch',
           label: 'commit the nested rewrite',
-          hint: 'Rewrite the checks as <strong>nested conditionals</strong>: ' + code('edit age_safe.py') + ' and replace the three ifs with something like:' +
+          hint: 'On this branch you rewrite the checks as <strong>nested conditionals</strong> — one decision inside another, like:' +
             snip([
               'if age > 0:',
               '    if age < 13:',
@@ -303,7 +303,7 @@ window.GG = window.GG || {};
               '        else:',
               '            rating = "all access"'
             ]) +
-            'Then ' + code('git add .') + ' and ' + code('git commit -m "Nested version"') + '. The commit lands on YOUR branch — main stayed safe.',
+            'Do the work: ' + code('edit age_safe.py') + ' and click <strong>Done Coding</strong>. Then ' + code('git add .') + ' and ' + code('git commit -m "Nested version"') + '. The commit lands on YOUR branch — main stayed safe.',
           check: function (ctx) {
             return ctx.name === 'git commit' && ctx.ok && ctx.meta.committed && ctx.folder && ctx.folder.branch !== 'main';
           }
@@ -311,7 +311,7 @@ window.GG = window.GG || {};
         {
           id: 'switch-c',
           label: 'git switch -c <name>',
-          hint: 'Second experiment: hop back to a clean start with ' + code('git switch main') + ', then create AND switch in one step: ' + code('git switch -c parallel-conditionals') + '. Rewrite using <strong>parallel conditionals</strong> — one flat if/elif/else chain:' +
+          hint: 'Second experiment: hop back to a clean start with ' + code('git switch main') + ', then create AND switch in one step: ' + code('git switch -c parallel-conditionals') + '. This rewrite uses <strong>parallel conditionals</strong> — one flat if/elif/else chain:' +
             snip([
               'if age < 0:',
               '    rating = "invalid age"',
@@ -322,7 +322,7 @@ window.GG = window.GG || {};
               'else:',
               '    rating = "all access"'
             ]) +
-            'Commit it on this branch too.',
+            'Do the work (' + code('edit age_safe.py') + ' → <strong>Done Coding</strong>) and commit it on this branch too.',
           check: function (ctx) { return ctx.meta.switched && ctx.meta.created; }
         },
         {

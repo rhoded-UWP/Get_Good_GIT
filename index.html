@@ -71,10 +71,15 @@
       <p class="editor__conflict-help" id="editor-conflict-help" hidden>
         Keep the code you want. Delete the <span class="editor__marker">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>, <span class="editor__marker">=======</span>, and <span class="editor__marker">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> marker lines — they are Git's way of showing both versions.
       </p>
+      <div class="editor__worked" id="editor-worked" hidden>
+        <svg class="editor__worked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
+        <p class="editor__worked-text">You’ve worked hard to edit your code&hellip;</p>
+        <p class="editor__worked-sub">Click <strong>“Done Coding”</strong> to continue.</p>
+      </div>
       <textarea class="editor__textarea" id="editor-textarea" spellcheck="false" aria-label="File contents"></textarea>
       <div class="editor__actions">
         <button class="btn btn--ghost" type="button" data-editor-cancel>Cancel</button>
-        <button class="btn btn--primary" type="button" id="editor-save">Save &amp; Close</button>
+        <button class="btn btn--primary" type="button" id="editor-save">Done Coding</button>
       </div>
     </div>
   </div>

@@ -144,8 +144,8 @@ window.GG = window.GG || {};
         L('  cd <folder>        move into a folder (cd .. to go back up)', 'muted'),
         L('  pwd                print where you are', 'muted'),
         L('  cat <file>         print a file’s contents', 'muted'),
-        L('  edit <file>        open a file in a tiny editor (this is how', 'muted'),
-        L('                     you “work on your code” here)', 'muted'),
+        L('  edit <file>        do some coding on a file (click “Done', 'muted'),
+        L('                     Coding” to finish your work)', 'muted'),
         L('  touch <file>       create a new empty file', 'muted'),
         L('  clear              wipe the screen', 'muted')
       ],
